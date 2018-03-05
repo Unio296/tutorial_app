@@ -39,3 +39,10 @@ $ rails server
 
 詳しくは、[*Ruby on Rails チュートリアル*](https://railstutorial.jp/)
 を参考にしてください。
+
+Memo
+
+bitbucketにリポジトリを作成し、Push
+ & git remote add origin git@bitbucket.org:unioblog/tutorial_app.git
+ & git push -u origin --all
+ 
