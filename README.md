@@ -42,6 +42,40 @@ $ rails server
 
 Memo
 
+・リポジトリ作成
+ & git init
+ 
+・コミットするファイルを選択する(インデックスに追加)
+ & git add [オプション]
+            ファイル名          #指定ファイルのみadd
+            ディレクトリ名      #ディレクトリをadd
+            -A                  #全てをadd
+            *                   #カレントディレクトリからのファイルを全てadd
+            -u                  #gitで管理されているファイルのみadd
+            -n                  #addされるファイルを確認　※addはされない
+            -p                  #行単位でCommit
+            
+・コミット
+ & git commit [オプション]      #addで指定されていたファイルのコミット
+              .                 #全てをcommit   (git add -a ⇒ git commit と同義)
+              --amend           #直前のcommitを現在のステージングの内容と結合して上書き
+              -m "msg"          #commitメッセージを入力
+            
+・コミットログを確認する
+ & git log [オプション]       #全てのコミットログを確認
+            -oneline          #1行1コミット
+            -author="Name"    #指定ユーザのコミット履歴のみ
+            [FILE]            #指定ファイルのコミット履歴
+            
+・commit内容を表示
+git show [オプション]         #最新のコミット内容
+          [TAG]               #指定したタグのコミット内容を表示
+          -branch             #ブランチの作成・変更・マージ等の履歴を表示
+          
+
+・リポジトリでの追加、変更ファイルの確認
+git status
+
 bitbucketにリポジトリを作成し、Push
  & git remote add origin git@bitbucket.org:unioblog/tutorial_app.git
  & git push -u origin --all
