@@ -76,7 +76,22 @@ git show [オプション]         #最新のコミット内容
 ・リポジトリでの追加、変更ファイルの確認
 git status
 
-bitbucketにリポジトリを作成し、Push
+・bitbucketにリポジトリを作成し、Push
  & git remote add origin git@bitbucket.org:unioblog/tutorial_app.git
  & git push -u origin --all
+ 
+
+
+
+・コントローラ作成
+ & rails generate controller "Controller名" "アクション名(複数可？)"
+ 
+・モデル作成
+ & rails generate model "Model名" "列名":"型" email:string(例)
+  
+・元に戻す
+ & rails destroy "Controller名またはModel名"
+ 
+・マイグレーションの変更
+ & rails db:migrate
  
