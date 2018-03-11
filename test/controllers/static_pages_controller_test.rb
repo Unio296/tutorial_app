@@ -17,7 +17,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   test "should get home" do
     get static_pages_home_url   #GETリクエストをhomeアクションに対して発行 (=送信) せよ。
     assert_response :success    #そうすれば、リクエストに対するレスポンスは[成功]になるはず。
-    assert_select "title", "Home | #{@base_title}"   #タイトルタグチェック
+    assert_select "title", "#{@base_title}"   #タイトルタグチェック
   end
   #helpページに関するテスト
   test "should get help" do     
