@@ -2,14 +2,14 @@
 <html>
   <head>
     <title><%= full_title(yield(:title)) %></title>
-    <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all',
-                               'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application',
-                               'data-turbolinks-track': 'reload' %>
+    <%= render 'layouts/rails_default' %>                                        <%#headerタグパーシャル挿入%>
+    <%= render 'layouts/shim' %>                                                 <%#IE9以下用shimパーシャル挿入%>
   </head>
-
   <body>
-    <%= yield %>
+    <%= render 'layouts/header' %>                                               <%#headerパーシャル挿入%>
+    <div class="container">
+      <%= yield %>
+      <%= render 'layouts/footer' %>                                             <%#フッターパーシャル挿入%>
+    </div>
   </body>
 </html>
