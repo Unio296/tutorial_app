@@ -1,1 +1,4 @@
-#何もないがあるよ
+michael:                                                                        #テスト用ユーザ
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= User.digest('password') %>

@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)                                               #user_paramsで保存する属性を制限
     if @user.save
+      log_in @user                                                              #ログイン -> SessionHelper内のlog_in
       flash[:success] = "Welcome to the Sample App!"                            #登録成功時のflash挿入
       redirect_to @user                                                         #@userのページにリダイレクト
     else

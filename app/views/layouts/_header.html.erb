@@ -1,11 +1,28 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
-    <%= link_to "Tutorial app", root_path , id: "logo" %>
+    <%= link_to "sample app", root_path, id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "Home", root_path %></li>
-        <li><%= link_to "Help", help_path %></li>
-        <li><%= link_to "Log in", '#' %></li>
+        <li><%= link_to "Home", root_path %></li>                               <%#ログインの有無問わずHome表示%>
+        <li><%= link_to "Help", help_path %></li>                               <%#ログインの有無問わずHelp表示%>
+        <% if logged_in? %>                                                     <%#ここからログイン時のみ表示%>
+          <li><%= link_to "Users", '#' %></li>                                  <%#ログイン時のみUsers表示%>
+          <li class="dropdown">                                                 <%#ドロップダウンメニュー%>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">         <%#UsersのAccountドロップダウンメニュー%>
+              Account <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "Profile", current_user %></li>                   <%#Accountドロップダウンメニュー内のProfile%>
+              <li><%= link_to "Settings", '#' %></li>                           <%#Accountドロップダウンメニュー内のSettings%>
+              <li class="divider"></li>
+              <li>
+                <%= link_to "Log out", logout_path, method: :delete %>           <%#ログイン時のみLog out表示%>
+              </li>
+            </ul>
+          </li>
+        <% else %>                                                               <%#ここから非ログイン時のみ表示%>
+          <li><%= link_to "Log in", login_path %></li>                          <%#非ログイン時のみLog in表示%>
+        <% end %>
       </ul>
     </nav>
   </div>
