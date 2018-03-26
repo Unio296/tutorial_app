@@ -7,6 +7,6 @@ Rails.application.routes.draw do
   post '/signup',  to: 'users#create'                                           #ユーザ作成時のPOST
   get  '/login',   to: 'sessions#new'                                           #ログイン画面用ビュー
   post  '/login',  to: 'sessions#create'                                        #ログイン時のsession作成用
-  get  '/logout',   to: 'sessions#destroy'                                      #ログアウト時のsession削除用
+  delete '/logout',  to: 'sessions#destroy'                                      #ログアウト時のsession削除用
   resources :users                                                              #usersコントローラのRESTfulなルーティング
 end

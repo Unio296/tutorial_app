@@ -30,7 +30,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", login_path, count: 0                             #ログインへのリンクが無くなっているか
     assert_select "a[href=?]", logout_path                                      #ログアウトのリンクがあるか
     assert_select "a[href=?]", user_path(@user)                                 #ユーザページへのリンクがあるか
-    get logout_path                                                             #ログアウト                                   ※注　Tutorialではdeleteだったが通らなかったのでgetに
+    delete logout_path                                                             #ログアウト
     assert_not is_logged_in?                                                    #非ログイン状態かチェック
     assert_redirected_to root_url                                               #リダイレクト先がルートかチェック
     follow_redirect!                                                            #リダイレクト先のページに移動
