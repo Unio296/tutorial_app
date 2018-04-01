@@ -84,5 +84,9 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?                                                     #有効にならなければOK
   end
   
+  #authenticated?メソッドがnilの場合、エラーではなくfalseを返すテスト
+  test "authenticated? should return false for a user with nil digest" do
+    assert_not @user.authenticated?('')
+  end
   
 end

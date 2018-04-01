@@ -4,9 +4,24 @@ module SessionsHelper
     session[:user_id] = user.id
   end
   
-  # 現在ログイン中のユーザーを返す (いる場合)
+  # ユーザーのセッションを永続的にする
+  def remember(user)                                                            #userはユーザオブジェクト
+    user.remember                                                               #user.rbのrememberメソッドを実行。remember_digest属性に値を生成
+    cookies.permanent.signed[:user_id] = user.id                                #暗号化したユーザIDのCookieを作成
+    cookies.permanent[:remember_token] = user.remember_token                    #記憶トークンのCookieを作成。
+  end
+  
+  # 現在のsessionが無ければ記憶トークンcookieに対応するユーザーを返す
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id])                       #@current_userがnilの場合、idでuserを検索。それ以外の場合は@current_userをそのまま返す
+    if (user_id = session[:user_id])                                            #sessionがある場合
+      @current_user ||= User.find_by(id: user_id)                               #current_userを返す
+    elsif (user_id = cookies.signed[:user_id])                                  #sessionがなくてcookiesがある場合
+      user = User.find_by(id: user_id)                                          #cookiesのユーザIDに対応するuserを取得
+      if user && user.authenticated?(cookies[:remember_token])                  #userが存在して、かつ記憶トークンとremember_digestと一致する場合
+        log_in user                                                             #ログインを実行する
+        @current_user = user                                                    #current_userにuserを代入
+      end
+    end
   end
   
   # ユーザーがログインしていればtrue、その他ならfalseを返す
@@ -14,8 +29,16 @@ module SessionsHelper
     !current_user.nil?
   end
   
+  # 永続的セッションを破棄する
+  def forget(user)
+    user.forget                                                                 #サーバ側のremember_digestを削除し、ブラウザ側の既存のremember_tokenではログイン不可にする
+    cookies.delete(:user_id)                                                    #ブラウザ側のuser_idのCookieを削除
+    cookies.delete(:remember_token)                                             #ブラウザ側のremember_tokenのCookieを削除
+  end
+  
   # 現在のユーザーをログアウトする
   def log_out
+    forget(current_user)                                                        #永続セッション無効化
     session.delete(:user_id)
     @current_user = nil
   end
