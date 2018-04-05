@@ -11,7 +11,7 @@ class User < ApplicationRecord                                                  
                                     format: { with: VALID_EMAIL_REGEX },        #emailのフォーマットに合致するか
                                     uniqueness: { case_sensitive: false }       #一意性のため（大文字と小文字は区別しない）
  has_secure_password
- validates :password, presence: true, length: { minimum: 6 }
+ validates :password, presence: true, length: { minimum: 6 }, allow_nil: true   #Passwordは必須、６文字以上、だが編集時にはnilを許す
  
  class << self                                                                  #Userクラスで実行されるメソッド
    # 渡された文字列のハッシュ値を返す                                           #テスト用ユーザデータのパスワードを生成するため

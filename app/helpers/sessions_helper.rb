@@ -4,11 +4,16 @@ module SessionsHelper
     session[:user_id] = user.id
   end
   
-  # ユーザーのセッションを永続的にする
+  # 永続セッションとしてユーザーを記憶する
   def remember(user)                                                            #userはユーザオブジェクト
     user.remember                                                               #user.rbのrememberメソッドを実行。remember_digest属性に値を生成
     cookies.permanent.signed[:user_id] = user.id                                #暗号化したユーザIDのCookieを作成
     cookies.permanent[:remember_token] = user.remember_token                    #記憶トークンのCookieを作成。
+  end
+  
+  # 渡されたユーザーがログイン済みユーザーであればtrueを返す
+  def current_user?(user)
+    user == current_user
   end
   
   # 現在のsessionが無ければ記憶トークンcookieに対応するユーザーを返す
@@ -42,4 +47,16 @@ module SessionsHelper
     session.delete(:user_id)
     @current_user = nil
   end
+  
+  # 記憶したURL (もしくはデフォルト値) にリダイレクト
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default)                            #session[:forwarding_url]のURLにリダイレクト。またはdefaultにリダイレクト。
+    session.delete(:forwarding_url)                                             #session[:forwarding_url]を削除
+  end
+
+  # アクセスしようとしたURLを覚えておく
+  def store_location
+    session[:forwarding_url] = request.original_url if request.get?             #session[:forwarding_url]にrequestしたURLを保存
+  end
+  
 end

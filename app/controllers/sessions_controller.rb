@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def new                                                                       #ログインビュー用
-  render 'new'                                                                  #newビューを表示
+    render 'new'                                                                #newビューを表示
   end
   
   def create                                                                    #session作成（ログイン時）
@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:session][:password])                   #userが存在してかつ、user.authenticateでpasswordを認証できる場合
       log_in @user                                                               # ユーザーログイン後にユーザー情報のページにリダイレクトする
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)     #チェックボックスがチェックされているときrememberする
-      redirect_to @user                                                           #@userのページにリダイレクト
+      redirect_back_or @user                                                     #session[:forwarding_url]のURLにリダイレクト
     else
       # エラーメッセージを作成する
       flash.now[:danger] = 'Invalid email/password combination'                 #エラーメッセージを表示
