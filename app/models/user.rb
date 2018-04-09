@@ -1,8 +1,9 @@
 class User < ApplicationRecord                                                  #Userモデルに関する属性の定義
 
-  attr_accessor :remember_token                                                 #アクセス可能なremember_tokenを作成
+  attr_accessor :remember_token, :activation_token                               #アクセス可能なremember_tokenを作成
 
-  before_save { email.downcase! }                                               #保存前にはemailを小文字に変換
+  before_save :downcase_email                                                    #保存前にはemailを小文字に変換
+  before_create :create_activation_digest                                       #ユーザ作成前にactivation_digestを生成
   #validationの定義
   validates :name, presence: true ,length: {maximum: 50}                        #name属性は必須かつ50文字以内
   
@@ -34,14 +35,38 @@ class User < ApplicationRecord                                                  
   end
   
   # 渡されたトークンがダイジェストと一致したらtrueを返す
-  def authenticated?(remember_token)                                            #引数のremember_tokenはブラウザに保存されていたもので、上記で定義しているものとは別
-    return false if remember_digest.nil?                                        #引数のremember_tokenがnilならfalseを返す
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)          #おそらくis_password?はremember_tokenをハッシュしてremember_digestと比較して一致したらtrue
+  def authenticated?(attribute, token)                                          #引数のremember_tokenはブラウザに保存されていたもので、上記で定義しているものとは別
+    digest = send("#{attribute}_digest")                                        #remember_digestかactivation_digestのどちらかを判断するため
+    return false if digest.nil?                                                 #引数のremember_tokenがnilならfalseを返す
+    BCrypt::Password.new(digest).is_password?(token)                            #おそらくis_password?はremember_tokenをハッシュしてremember_digestと比較して一致したらtrue
   end
  
   # ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)                                     #remember_digestにnilを代入し、cookieでログインできないようにする
   end
+  
+  # アカウントを有効にする
+  def activate
+    update_columns(activated: true, activated_at: Time.zone.now)                #アクティベーション有効化と日時記録
+  end
+
+  # 有効化用のメールを送信する
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now
+  end
+  
+ 
+ private
+    # メールアドレスをすべて小文字にする
+    def downcase_email
+      email.downcase!
+    end
+    
+    # 有効化トークンとダイジェストを作成および代入する
+    def create_activation_digest
+      self.activation_token  = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
  
 end

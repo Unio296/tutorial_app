@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy                                 #destroyの前に管理者かどうかチェックするアクション
     
   def index                                                                     #ユーザ一覧ページ用アクション
-    @users = User.paginate(page: params[:page])                                 #ページ毎のユーザ取得
+    @users = User.where(activated: true).paginate(page: params[:page])           #アクティベーションされているユーザ取得(ページ毎のユーザのみ)
   end
   
   def new
@@ -13,14 +13,15 @@ class UsersController < ApplicationController
   
   def show                                                                      #ユーザ情報ページ用アクション
     @user = User.find(params[:id])                                              #@user取得
+    redirect_to root_url and return unless @user.activated?                     #アクティベートされていなければrootにリダイレクト
   end
   
   def create
     @user = User.new(user_params)                                               #user_paramsで保存する属性を制限
     if @user.save
-      log_in @user                                                              #ログイン -> SessionHelper内のlog_in
-      flash[:success] = "Welcome to the Sample App!"                            #登録成功時のflash挿入
-      redirect_to @user                                                         #@userのページにリダイレクト
+      @user.send_activation_email                                               #ユーザモデルオブジェクトからメールを送信
+      flash[:info] = "Please check your email to activate your account."        #flashでアクティベーションのメッセージ
+      redirect_to root_url                                                      #rootにリダイレクト
     else
       render 'new'
     end

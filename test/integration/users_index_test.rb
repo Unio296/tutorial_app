@@ -13,7 +13,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path                                                              #user一覧ページにアクセス
     assert_template 'users/index'                                               #usersコントローラのindexアクションが呼ばれているか
     assert_select 'div.pagination' , count:2                                    #div paginationクラスが2つあるか
-    User.paginate(page: 1).each do |user|                                       #１ページ目のuserチェック
+    User.where(activated: true).paginate(page: 1).each do |user|                #１ページ目のuserチェック(activateされているユーザのみ)
       assert_select 'a[href=?]', user_path(user), text: user.name               #userへのリンクとuserへの名前があるか
     end
   end
@@ -23,7 +23,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path                                                              #ユーザ一覧にアクセス
     assert_template 'users/index'                                               #usersコントローラのindexアクションが呼び出されているかどうか
     assert_select 'div.pagination'                                              #div paginationクラスがあるか
-    first_page_of_users = User.paginate(page: 1)                                #first_page_of_usersに最初のページのユーザ情報を格納
+    first_page_of_users = User.where(activated: true).paginate(page: 1)         #first_page_of_usersに最初のページのユーザ情報を格納(activateされている人のみ)
     first_page_of_users.each do |user|                                          #first_page_of_usersのユーザを繰り返し
       assert_select 'a[href=?]', user_path(user), text: user.name               #ユーザの名前のリンクがあるか
       unless user == @admin                                                     #管理者ユーザ以外に
