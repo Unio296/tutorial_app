@@ -13,4 +13,15 @@ class UserMailerTest < ActionMailer::TestCase
     assert_match user.activation_token,   mail.body.encoded                     #Activation_tokenのテスト
     assert_match CGI.escape(user.email),  mail.body.encoded                     #エスケープしたメールアドレスのテスト
   end
+  
+  test "password_reset" do
+    user = users(:michael)                                                      #michaelでログイン
+    user.reset_token = User.new_token                                           #reset_tokenを生成
+    mail = UserMailer.password_reset(user)                                      #メール送付？
+    assert_equal "Password reset", mail.subject                                 #メールタイトルのテスト
+    assert_equal [user.email], mail.to                                          #宛先テスト
+    assert_equal ["noreply@example.com"], mail.from                             #Fromのテスト
+    assert_match user.reset_token,        mail.body.encoded                     #reset_tokenのテスト
+    assert_match CGI.escape(user.email),  mail.body.encoded                     #エスケープしたメールアドレスのテスト
+  end
 end

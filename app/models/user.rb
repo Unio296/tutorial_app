@@ -1,6 +1,6 @@
 class User < ApplicationRecord                                                  #Userモデルに関する属性の定義
 
-  attr_accessor :remember_token, :activation_token                               #アクセス可能なremember_tokenを作成
+  attr_accessor :remember_token, :activation_token, :reset_token                #アクセス可能なremember_token, activation_token, reset_tokenを作成
 
   before_save :downcase_email                                                    #保存前にはemailを小文字に変換
   before_create :create_activation_digest                                       #ユーザ作成前にactivation_digestを生成
@@ -56,6 +56,23 @@ class User < ApplicationRecord                                                  
     UserMailer.account_activation(self).deliver_now
   end
   
+  # パスワード再設定の属性を設定する
+  def create_reset_digest
+    self.reset_token = User.new_token                                           #reset_tokenを生成
+    #update_attribute(:reset_digest,  User.digest(reset_token))                  #reset_digest属性にハッシュ化したreset_tokenを設定
+    #update_attribute(:reset_sent_at, Time.zone.now)                             #reset_sent_atに現在時間を設定
+    update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)  #データベースへの問合せが１回で済む
+  end
+  
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+ 
+   # パスワード再設定の期限が切れている場合はtrueを返す
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago                                               #2時間の期限が切れている場合はtrueを返す
+  end
  
  private
     # メールアドレスをすべて小文字にする
