@@ -129,4 +129,18 @@ git status
  & rails db:migrate
 ```
 
+### リモートリポジトリ先を確認
+SSH鍵の設定実施後
+
+```
+ & git remote -v
+```
+
+### リモートリポジトリ先を変更
+SSH鍵の設定実施後、Pathを取得し、下記のコマンドを実行 (PathはGithubに変更の場合)
+
+```
+ & git remote set-url origin git@github.com:Unio296/Stationery_app.git
+```
+
 2018/04/14 雛形リポジトリ完成 Githubに保存
