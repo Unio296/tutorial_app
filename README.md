@@ -95,3 +95,4 @@ git status
 ・マイグレーションの変更
  & rails db:migrate
  
+2018/04/14 雛形リポジトリ完成 Githubに保存
