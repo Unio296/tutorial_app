@@ -40,12 +40,19 @@ $ rails server
 詳しくは、[*Ruby on Rails チュートリアル*](https://railstutorial.jp/)
 を参考にしてください。
 
-Memo
+#Memo
 
-・リポジトリ作成
+##Gitコマンド
+
+###・リポジトリ作成
+
+```
  & git init
+ ```
  
-・コミットするファイルを選択する(インデックスに追加)
+###・コミットするファイルを選択する(インデックスに追加)
+
+```
  & git add [オプション]
             ファイル名          #指定ファイルのみadd
             ディレクトリ名      #ディレクトリをadd
@@ -54,45 +61,72 @@ Memo
             -u                  #gitで管理されているファイルのみadd
             -n                  #addされるファイルを確認　※addはされない
             -p                  #行単位でCommit
+```
             
-・コミット
+            
+###・コミット
+
+```
  & git commit [オプション]      #addで指定されていたファイルのコミット
               .                 #全てをcommit   (git add -a ⇒ git commit と同義)
               --amend           #直前のcommitを現在のステージングの内容と結合して上書き
               -m "msg"          #commitメッセージを入力
-            
-・コミットログを確認する
+```
+
+###・コミットログを確認する
+
+```
  & git log [オプション]       #全てのコミットログを確認
             -oneline          #1行1コミット
             -author="Name"    #指定ユーザのコミット履歴のみ
             [FILE]            #指定ファイルのコミット履歴
-            
-・commit内容を表示
+```
+
+###・commit内容を表示
+
+```
 git show [オプション]         #最新のコミット内容
           [TAG]               #指定したタグのコミット内容を表示
           -branch             #ブランチの作成・変更・マージ等の履歴を表示
-          
+```
 
-・リポジトリでの追加、変更ファイルの確認
+###・リポジトリでの追加、変更ファイルの確認
+
+```
 git status
+```
 
-・bitbucketにリポジトリを作成し、Push
+###・bitbucketにリポジトリを作成し、Push
+
+```
  & git remote add origin git@bitbucket.org:unioblog/tutorial_app.git
  & git push -u origin --all
- 
+ ```
 
+##Railsコマンド
 
+###・コントローラ作成
 
-・コントローラ作成
+```
  & rails generate controller "Controller名" "アクション名(複数可？)"
+```
  
-・モデル作成
+###・モデル作成
+
+```
  & rails generate model "Model名" "列名":"型" email:string(例)
-  
-・元に戻す
+```
+
+###・元に戻す
+
+```
  & rails destroy "Controller名またはModel名"
- 
-・マイグレーションの変更
+```
+
+###・マイグレーションの変更
+
+```
  & rails db:migrate
- 
+```
+
 2018/04/14 雛形リポジトリ完成 Githubに保存
