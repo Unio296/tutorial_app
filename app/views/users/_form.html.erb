@@ -1,5 +1,5 @@
   <%= form_for(@user, url: yield(:url)) do |f| %>
-    <%= render 'shared/error_messages', object: @user %>                        <%#エラーメッセージがあれば表示%>
+    <%= render 'shared/error_messages', object: f.object %>                        <%#エラーメッセージがあれば表示%>
     
     <%= f.label :name %>
     <%= f.text_field :name, class: 'form-control' %>                           <%#name属性変更用%>

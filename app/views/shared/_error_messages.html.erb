@@ -1,10 +1,10 @@
-<% if @user.errors.any? %>                                                       <%#@userにerrorオブジェクトがある場合に実行%>
+<% if object.errors.any? %>                                                       <%#@userにerrorオブジェクトがある場合に実行%>
   <div id="error_explanation">                                                   <%#エラーメッセージのスタイル指定%>
     <div class="alert alert-danger">
-      The form contains <%= pluralize(@user.errors.count, "error") %>.           <%#1つのエラーなら"1 error",二つ以上なら"数 errors"を表示%>
+      The form contains <%= pluralize(object.errors.count, "error") %>.           <%#1つのエラーなら"1 error",二つ以上なら"数 errors"を表示%>
     </div>
     <ul>
-    <% @user.errors.full_messages.each do |msg| %>                               <%#エラーメッセージ表示%>
+    <% object.errors.full_messages.each do |msg| %>                               <%#エラーメッセージ表示%>
       <li><%= msg %></li>
     <% end %>
     </ul>

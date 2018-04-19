@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   resources :users                                                              #usersコントローラのRESTfulなルーティング
   resources :account_activations, only: [:edit]                                 #account_activationsコントローラのRESTfulのうちのeditのみ
   resources :password_resets,     only: [:new, :create, :edit, :update]         #password_resetsコントローラのRESTfulのうちのnew,create,edit,update
+  resources :microposts,          only: [:create, :destroy]                     #micropostsコントローラのcreate,destroyのみ定義
 end

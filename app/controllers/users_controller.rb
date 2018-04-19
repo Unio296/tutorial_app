@@ -13,6 +13,7 @@ class UsersController < ApplicationController
   
   def show                                                                      #ユーザ情報ページ用アクション
     @user = User.find(params[:id])                                              #@user取得
+    @microposts = @user.microposts.paginate(page: params[:page])                #@userの@micropostsを取得
     redirect_to root_url and return unless @user.activated?                     #アクティベートされていなければrootにリダイレクト
   end
   
@@ -55,15 +56,6 @@ class UsersController < ApplicationController
     end
   
     # beforeアクション
-
-    # ログイン済みユーザーかどうか確認
-    def logged_in_user
-      unless logged_in?                                                         #loginしていない場合
-        store_location                                                          #session[:forwarding_url]のURLを記憶
-        flash[:danger] = "Please log in."                                       #flashでエラーメッセージを表示
-        redirect_to login_url                                                   #ログインページにリダイレクト
-      end
-    end
     
     # 正しいユーザーかどうか確認
     def correct_user

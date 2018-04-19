@@ -1,5 +1,6 @@
 class User < ApplicationRecord                                                  #Userモデルに関する属性の定義
-
+  has_many :microposts, dependent: :destroy                                     #複数のmicropostを所有する関連付け、かつユーザが削除された場合micropostsも同時に削除する
+  
   attr_accessor :remember_token, :activation_token, :reset_token                #アクセス可能なremember_token, activation_token, reset_tokenを作成
 
   before_save :downcase_email                                                    #保存前にはemailを小文字に変換
@@ -72,6 +73,12 @@ class User < ApplicationRecord                                                  
    # パスワード再設定の期限が切れている場合はtrueを返す
   def password_reset_expired?
     reset_sent_at < 2.hours.ago                                               #2時間の期限が切れている場合はtrueを返す
+  end
+ 
+   # 試作feedの定義
+  # 完全な実装は次章の「ユーザーをフォローする」を参照
+  def feed
+    Micropost.where("user_id = ?", id)
   end
  
  private
