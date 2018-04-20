@@ -9,6 +9,7 @@ class MicropostsController < ApplicationController
       redirect_to root_url                                                      #rootにリダイレクト
     else                                                                        #保存できなかった場合
       @feed_items = []
+      #@feed_items = current_user.feed.paginate(page: params[:page])            #これをするとpaginateのリンクでエラーが出る
       render 'static_pages/home'                                                #homeアクションでrender
     end
   end
