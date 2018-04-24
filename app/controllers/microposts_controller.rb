@@ -8,8 +8,8 @@ class MicropostsController < ApplicationController
       flash[:success] = "Micropost created!"                                    #flashに成功メッセージ
       redirect_to root_url                                                      #rootにリダイレクト
     else                                                                        #保存できなかった場合
-      @feed_items = []
-      #@feed_items = current_user.feed.paginate(page: params[:page])            #これをするとpaginateのリンクでエラーが出る
+      #@feed_items = []
+      @feed_items = current_user.feed.paginate(page: params[:page])            
       render 'static_pages/home'                                                #homeアクションでrender
     end
   end

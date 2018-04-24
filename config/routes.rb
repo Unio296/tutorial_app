@@ -12,8 +12,14 @@ Rails.application.routes.draw do
   get  '/login',   to: 'sessions#new'                                           #ログイン画面用ビュー
   post  '/login',  to: 'sessions#create'                                        #ログイン時のsession作成用
   delete '/logout',  to: 'sessions#destroy'                                     #ログアウト時のsession削除用
-  resources :users                                                              #usersコントローラのRESTfulなルーティング
+  #resources :users                                                              #usersコントローラのRESTfulなルーティング
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
   resources :account_activations, only: [:edit]                                 #account_activationsコントローラのRESTfulのうちのeditのみ
   resources :password_resets,     only: [:new, :create, :edit, :update]         #password_resetsコントローラのRESTfulのうちのnew,create,edit,update
   resources :microposts,          only: [:create, :destroy]                     #micropostsコントローラのcreate,destroyのみ定義
+  resources :relationships,       only: [:create, :destroy]
 end

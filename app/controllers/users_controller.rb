@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]       #indexとeditとupdateとdestroyのアクションは実行前にlogged_in_userを実行してログインの有無を確認する
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy,       #indexとeditとupdateとdestroyのアクションは実行前にlogged_in_userを実行してログインの有無を確認する
+                                          :following, :followers]
   before_action :correct_user,   only: [:edit, :update]                         #editとupdateのアクションは実行前にlogged_in_userが実行して正しいユーザかどうかを確認する
   before_action :admin_user,     only: :destroy                                 #destroyの前に管理者かどうかチェックするアクション
     
@@ -45,6 +46,22 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy                                              #params[:id]のuserを削除
     flash[:success] = "User deleted"                                            #flashに成功メッセージ表示
     redirect_to users_url                                                       #ユーザ一覧ページにリダイレクト
+  end
+  
+  #フォローリスト表示用アクション
+  def following
+    @title = "Following"
+    @user  = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  #フォロワーリスト表示用アクション
+  def followers
+    @title = "Followers"
+    @user  = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
   
   #ここから↓はprivate ... Userコントローラ内部のみで実行されるdef
